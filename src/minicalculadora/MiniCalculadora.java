@@ -29,9 +29,9 @@ public class MiniCalculadora extends javax.swing.JFrame {
 
         txfNum1 = new javax.swing.JTextField();
         txfNum2 = new javax.swing.JTextField();
-        txFResultado = new javax.swing.JTextField();
+        txfResultado = new javax.swing.JTextField();
         btnResultado = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox();
+        comboBox = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -41,14 +41,19 @@ public class MiniCalculadora extends javax.swing.JFrame {
         txfNum2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txfNum2.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
 
-        txFResultado.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txFResultado.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txfResultado.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txfResultado.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
 
         btnResultado.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnResultado.setText("=");
+        btnResultado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                calcular(evt);
+            }
+        });
 
-        jComboBox1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "+", "-", "*", "/" }));
+        comboBox.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        comboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "+", "-", "*", "/" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -57,14 +62,14 @@ public class MiniCalculadora extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addComponent(txfNum1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(comboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(14, 14, 14)
                 .addComponent(txfNum2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(txFResultado, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                .addComponent(txfResultado, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -74,19 +79,55 @@ public class MiniCalculadora extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txfNum1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txfNum2, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txFResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txfResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(comboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(49, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
+    private void calcular(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calcular
+        Numero n1 = new Numero(txfNum1.getText(), ',');
+        Numero n2 = new Numero(txfNum2.getText(), ',');
+        double num1 = n1.getNumero();
+        double num2 = n2.getNumero();
+        double resul = 0;
+        if (num1 == Double.MAX_VALUE || num2 == Double.MAX_VALUE) {
+            txfResultado.setText("error");
+        } else {
+            String operacion = (String) comboBox.getSelectedItem();
+            switch (operacion) {
+                case "+":
+                    resul = num1 + num2;
+                    break;
+                case "-":
+                    resul = num1 - num2;
+                    break;
+                case "*":
+                    resul = num1 * num2;
+                    break;
+                case "/":
+                    if (num2 == 0) {
+                        resul = Double.MAX_VALUE;
+                    } else {
+                        resul = num1 / num2;
+                    }
+            }
+            if (resul == Double.MAX_VALUE) {
+                txfResultado.setText("error");
+            } else {
+                Numero resultado = new Numero(resul);
+                txfResultado.setText(resultado.toString());
+            }
+        }
+    }//GEN-LAST:event_calcular
+
+/**
+ * @param args the command line arguments
+ */
+public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -97,16 +138,32 @@ public class MiniCalculadora extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
-                }
+                
+
+}
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MiniCalculadora.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MiniCalculadora.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MiniCalculadora.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MiniCalculadora.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MiniCalculadora.class  
+
+.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } 
+
+catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(MiniCalculadora.class  
+
+.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } 
+
+catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(MiniCalculadora.class  
+
+.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } 
+
+catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(MiniCalculadora.class  
+
+.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -117,12 +174,12 @@ public class MiniCalculadora extends javax.swing.JFrame {
             }
         });
     }
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnResultado;
-    private javax.swing.JComboBox jComboBox1;
-    private javax.swing.JTextField txFResultado;
+    private javax.swing.JComboBox comboBox;
     private javax.swing.JTextField txfNum1;
     private javax.swing.JTextField txfNum2;
+    private javax.swing.JTextField txfResultado;
     // End of variables declaration//GEN-END:variables
 }
